@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,17 +13,31 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
-  late AnimationController _animationController;
-  final int numberOfStars = 200;
+  late AnimationController _slideController;
+  late AnimationController _scaleController;
+  final int numberOfStars = 100;
+  final _slideDuration = const Duration(
+    seconds: 16,
+  );
+  final _scaleDuration = const Duration(
+    milliseconds: 2000,
+  );
+  StreamController<Offset> controller = StreamController();
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
+    _slideController = AnimationController(
       vsync: this,
-      duration: const Duration(
-        milliseconds: 4000,
-      ),
+      duration: _slideDuration,
+    )..repeat(
+        reverse: false,
+        min: 0.0,
+        max: 1.0,
+      );
+    _scaleController = AnimationController(
+      vsync: this,
+      duration: _scaleDuration,
     )..repeat(
         reverse: true,
       );
@@ -30,17 +46,65 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ImageFiltered(
-        imageFilter: ImageFilter.blur(
-          sigmaX: 3,
-          sigmaY: 3,
-        ),
-        enabled: false,
+      body: MouseRegion(
+        cursor: SystemMouseCursors.none,
+        onHover: (event) {
+          controller.add(event.position);
+        },
         child: Stack(
           children: [
             _buildBackground(),
-            ..._buildStars(),
+            ..._buildStars(context),
+            StreamBuilder(
+              stream: controller.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Positioned(
+                    left: snapshot.data!.dx,
+                    top: snapshot.data!.dy,
+                    child: Transform.rotate(
+                      angle: -pi / 2,
+                      child: Image.asset(
+                        'assets/images/rocket.png',
+                        width: 60,
+                        height: 60,
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+            // _buildNameCard(),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNameCard() {
+    return Center(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 2.5,
+          sigmaY: 2.5,
+        ),
+        child: PhysicalModel(
+          color: Colors.white,
+          elevation: 8.0,
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Text(
+              'TAUQEER AHMED',
+              style: GoogleFonts.spaceMono(
+                fontSize: 55,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -54,7 +118,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  List<Widget> _buildStars() {
+  List<Widget> _buildStars(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final random = Random();
@@ -64,26 +128,33 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         final xPosition = random.nextInt(width.toInt()).toDouble();
         final yPosition = random.nextInt(height.toInt()).toDouble();
         return AnimatedBuilder(
-          animation: _animationController,
+          animation: _slideController,
           builder: (
             context,
             child,
           ) {
-            return SlideTransition(
-              position: Tween<Offset>(
-                begin: Offset(10, height * 0.5),
-                end: Offset(width, height * 0.5),
-              ).animate(_animationController),
-              child: Transform.scale(
-                scale: _animationController.value,
+            return Positioned(
+              left: getLeftPosition(
+                x: xPosition,
+                width: width,
+                animationValue: _slideController.value,
+              ),
+              top: yPosition,
+              child: AnimatedBuilder(
+                animation: _scaleController,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: getScaleValue(index: index),
+                    child: child!,
+                  );
+                },
                 child: child!,
               ),
-              // child: child!,
             );
           },
           child: Container(
-            width: 5,
-            height: 5,
+            width: 8,
+            height: 8,
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
@@ -94,5 +165,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       },
     );
     return stars;
+  }
+
+  double getLeftPosition({
+    required double width,
+    required double x,
+    required double animationValue,
+  }) {
+    if (animationValue <= 0.0) {
+      return x;
+    } else {
+      final position = x + (width * animationValue);
+      if (position >= width) {
+        return position - width;
+      } else {
+        return position;
+      }
+    }
+  }
+
+  double getScaleValue({
+    required int index,
+  }) {
+    if (index % 2 == 0) {
+      return _scaleController.value;
+    } else {
+      return 1 - _scaleController.value;
+    }
   }
 }
