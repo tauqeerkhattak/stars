@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,7 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   late AnimationController _slideController;
   late AnimationController _scaleController;
-  final int numberOfStars = 100;
+  final int numberOfStars = kDebugMode ? 50 : 200;
   final _slideDuration = const Duration(
     seconds: 16,
   );
@@ -62,12 +64,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   return Positioned(
                     left: snapshot.data!.dx,
                     top: snapshot.data!.dy,
-                    child: Transform.rotate(
-                      angle: -pi / 2,
-                      child: Image.asset(
-                        'assets/images/rocket.png',
-                        width: 60,
-                        height: 60,
+                    child: SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: Transform.rotate(
+                        angle: -pi / 2,
+                        child: Lottie.asset(
+                          'assets/lottie/rocket.json',
+                          fit: BoxFit.fill,
+                          width: 60,
+                          height: 60,
+                          repeat: true,
+                          reverse: true,
+                        ),
                       ),
                     ),
                   );
