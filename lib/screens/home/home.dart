@@ -64,19 +64,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   return Positioned(
                     left: snapshot.data!.dx,
                     top: snapshot.data!.dy,
-                    child: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: Transform.rotate(
-                        angle: -pi / 2,
-                        child: Lottie.asset(
-                          'assets/lottie/rocket.json',
-                          fit: BoxFit.fill,
-                          width: 60,
-                          height: 60,
-                          repeat: true,
-                          reverse: true,
-                        ),
+                    child: Transform.rotate(
+                      angle: -pi / 2,
+                      child: Lottie.asset(
+                        'assets/lottie/rocket.json',
+                        fit: BoxFit.fitWidth,
+                        width: 60,
+                        height: 60,
+                        repeat: true,
+                        reverse: true,
                       ),
                     ),
                   );
@@ -87,33 +83,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             ),
             // _buildNameCard(),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNameCard() {
-    return Center(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 2.5,
-          sigmaY: 2.5,
-        ),
-        child: PhysicalModel(
-          color: Colors.white,
-          elevation: 8.0,
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width * 0.4,
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: Text(
-              'TAUQEER AHMED',
-              style: GoogleFonts.spaceMono(
-                fontSize: 55,
-              ),
-            ),
-          ),
         ),
       ),
     );
