@@ -225,7 +225,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       {required double height, required double width}) {
     final animationValue = _obstacleController.value;
     final rocketSize = width * 0.1;
-    if (animationValue >= 0.999) {
+    if (animationValue >= 0.99) {
       _obstacleYPosition = random.nextInt(height.floor()).toDouble();
       print(
           'CHANGE Y POSITION OF OBSTACLE: $_obstacleYPosition ${_obstacleController.duration?.inSeconds}');
