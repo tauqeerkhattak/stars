@@ -3,7 +3,13 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:stars/models/obstacles/obstacle_data.dart';
+
+final obstacleProvider = StateProvider.autoDispose<ObstacleData>(
+  (ref) => ObstacleData(),
+);
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

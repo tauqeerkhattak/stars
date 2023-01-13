@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'screens/home/home.dart';
 
@@ -11,8 +12,10 @@ class StarsProject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Home(),
+    return const ProviderScope(
+      child: MaterialApp(
+        home: Home(),
+      ),
     );
   }
 }
