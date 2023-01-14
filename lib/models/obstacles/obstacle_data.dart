@@ -26,4 +26,12 @@ class ObstacleData {
     data['image'] = image;
     return data;
   }
+
+  ObstacleData copyWith({double? yPosition, Duration? speed, String? image}) {
+    return ObstacleData(
+      yPosition: yPosition ?? this.yPosition,
+      speed: speed ?? this.speed,
+      image: image ?? this.image,
+    );
+  }
 }

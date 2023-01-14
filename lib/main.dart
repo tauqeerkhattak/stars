@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
+import 'package:stars/screens/game_start/game_start.dart';
 
-import 'screens/home/home.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
   runApp(const StarsProject());
 }
 
@@ -12,10 +16,9 @@ class StarsProject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ProviderScope(
-      child: MaterialApp(
-        home: Home(),
-      ),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: GameStart(),
     );
   }
 }
