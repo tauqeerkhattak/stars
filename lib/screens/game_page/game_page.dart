@@ -22,7 +22,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   late AnimationController _scaleController;
   late AnimationController _obstacleController;
   final random = Random();
-  final int numberOfStars = kDebugMode ? 50 : 200;
+  final int numberOfStars = kDebugMode ? 50 : 100;
   final _slideDuration = const Duration(
     seconds: 10,
   );
@@ -71,11 +71,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     final rocketSize = width * 0.1;
     if (animationValue >= 0.99) {
       final nextHeight = random.nextInt(height.floor()).toDouble();
-      final nextSpeed = random.nextInt(4);
+      final nextSpeed = random.nextInt(5);
       final nextImage = random.nextInt(AppAssets.obstacles.length);
       obstacleData = obstacleData?.copyWith(
         yPosition: nextHeight,
-        speed: nextSpeed > 0 ? Duration(seconds: nextSpeed) : null,
+        speed: nextSpeed > 2 ? Duration(seconds: nextSpeed) : null,
         image: AppAssets.obstacles[nextImage],
       );
       _obstacleController.duration = obstacleData!.speed;
