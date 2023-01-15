@@ -75,7 +75,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       final nextImage = random.nextInt(AppAssets.obstacles.length);
       obstacleData = obstacleData?.copyWith(
         yPosition: nextHeight,
-        speed: nextSpeed > 2 ? Duration(seconds: nextSpeed) : null,
+        speed: nextSpeed > 0 ? Duration(seconds: nextSpeed) : null,
         image: AppAssets.obstacles[nextImage],
       );
       _obstacleController.duration = obstacleData!.speed;
