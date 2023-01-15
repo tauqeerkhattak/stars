@@ -138,7 +138,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       );
     _obstacleController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 7),
     )..repeat(
         reverse: false,
         min: 0.0,
