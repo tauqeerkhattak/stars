@@ -22,7 +22,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   late AnimationController _scaleController;
   late AnimationController _obstacleController;
   final random = Random();
-  final int numberOfStars = kDebugMode ? 50 : 100;
+  final int numberOfStars = 50;
   final _slideDuration = const Duration(
     seconds: 10,
   );
